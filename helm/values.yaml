@@ -1,0 +1,24 @@
+service:
+  name: load-generator
+image:
+  repository: 952893849914.dkr.ecr.us-east-1.amazonaws.com/aicares-application/load-generator
+containerPort: 8089
+resources:
+  limits:
+    memory: "1500Mi"
+  requests:
+    memory: "256Mi"
+    cpu: "100m"
+env:
+  - name: LOCUST_WEB_PORT
+    value: "8089"
+  - name: LOCUST_HOST
+    value: "http://frontend-proxy:8080"
+  - name: LOCUST_USERS
+    value: "3"
+  - name: OTEL_SERVICE_NAME
+    value: "load-generator"
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://otel-collector:4317"
+nodeSelector:
+  eks.amazonaws.com/nodegroup: graviton-workers
